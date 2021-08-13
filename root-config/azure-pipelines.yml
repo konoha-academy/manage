@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   branches:
     include:
@@ -11,10 +6,14 @@ trigger:
     include:
       - root-config
 
+variables:
+  - name: CONTAINER_NAME
+    value: mfes12257
+  - name: ACCOUNT_NAME
+    value: storage12257 
+
 pool:
   vmImage: ubuntu-latest
-
-
 
 steps:
 - checkout: self
@@ -27,14 +26,17 @@ steps:
 - task: Npm@1
   inputs:
     command: 'custom'
-    customCommand: "build"
+    customCommand: "run build"
     workingDir: root-config
 - task: AzureCLI@2
   displayName: Azure CLI Deploy
   inputs:
     azureSubscription: batata
     scriptType: bash
+    workingDirectory: root-config
     scriptLocation: inlineScript
     inlineScript: |
-      az --version
-      az account show
+      az storage blob upload-batch \
+          --destination ${CONTAINER_NAME} \
+          --source dist --account-name ${ACCOUNT_NAME} \
+          --auth-mode login
