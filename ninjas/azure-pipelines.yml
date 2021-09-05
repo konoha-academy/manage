@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - ninjas
+
+variables:
+  - name: CONTAINER_NAME
+    value: mfes12257
+  - name: ACCOUNT_NAME
+    value: storage12257 
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- checkout: self
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '14.x'
+- script: npx pnpm install
+  workingDirectory: root-config
+  displayName: 'install'
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    customCommand: "run build"
+    workingDir: root-config
+- task: AzureCLI@2
+  displayName: Azure CLI Deploy
+  inputs:
+    azureSubscription: batata
+    scriptType: bash
+    workingDirectory: root-config
+    scriptLocation: inlineScript
+    inlineScript: |
+      az account show
+      az storage blob upload-batch \
+          --destination ${CONTAINER_NAME} \
+          --source dist --account-name ${ACCOUNT_NAME}
