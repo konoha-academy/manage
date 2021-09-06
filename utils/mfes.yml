@@ -14,14 +14,14 @@ steps:
   - bash: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
     displayName: Install pnpm
   - script: pnpm i --frozen-lockfile
-    workingDirectory: root-config
+    workingDirectory: ${{ parameters.appName }}
     displayName: "packages install"
-  - script: pnpm:build:*
-    workingDirectory: root-config
+  - script: pnpm build
+    workingDirectory: ${{ parameters.appName }}
     displayName: "build"
   - task: AzureFileCopy@4
     inputs:
-      sourcePath: dist
+      sourcePath: $(Agent.BuildDirectory)/dist
       azureSubscription: batata
       destination: azureBlob
       storage: ${{ parameters.portal }}
