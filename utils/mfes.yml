@@ -19,22 +19,15 @@ steps:
   - script: pnpm build
     workingDirectory: ${{ parameters.appName }}
     displayName: "build"
-  - task: AzureFileCopy@4
+  - task: AzureCLI@2
+    displayName: Deploy to blob storage
     inputs:
-      sourcePath: $(Agent.BuildDirectory)/dist
       azureSubscription: batata
-      destination: azureBlob
-      storage: ${{ parameters.portal }}
-      containerName: ${{ parameters.appName }}
-  # - task: AzureCLI@2
-  #   displayName: Azure CLI Deploy
-  #   inputs:
-  #     azureSubscription: batata
-  #     scriptType: bash
-  #     workingDirectory: root-config
-  #     scriptLocation: inlineScript
-  #     inlineScript: |
-  #       az account show
-  #       az storage blob upload-batch \
-  #           --destination ${CONTAINER_NAME} \
-  #           --source dist --account-name ${ACCOUNT_NAME}
+      scriptType: bash
+      workingDirectory: ${{ parameters.appName }}
+      scriptLocation: inlineScript
+      inlineScript: |
+        az account show
+        az storage blob upload-batch \
+            --destination ${{ parameters.appName }} \
+            --source dist --account-name ${{ parameters.portal }}
