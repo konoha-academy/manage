@@ -1,6 +1,3 @@
-variables:
-  PNPM_CACHE_FOLDER: $(Pipeline.Workspace)/.pnpm-store
-
 parameters:
   - name: portal
     default: ""
@@ -19,10 +16,10 @@ steps:
   - task: Cache@2
     displayName: Cache Pnpm store
     inputs:
-      key: '"pnpm" | "$(Agent.OS)" | ${{ parameters.appName }}/**/pnpm-lock.yaml'
+      key: '"pnpm" | "$(Agent.OS)" | ${{ parameters.appName }}/pnpm-lock.yaml'
       restoreKeys: |
          pnpm | "$(Agent.OS)"
-      path: $(PNPM_CACHE_FOLDER)
+      path: ~/.pnpm-store
     
   - script: pnpm i --frozen-lockfile
     workingDirectory: ${{ parameters.appName }}
