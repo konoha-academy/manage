@@ -11,7 +11,6 @@
     "check-format": "prettier --check .",
     "test": "cross-env BABEL_ENV=test jest",
     "watch-tests": "cross-env BABEL_ENV=test jest --watch",
-    "prepare": "husky install",
     "coverage": "cross-env BABEL_ENV=test jest --coverage",
     "build:types": "tsc"
   },
@@ -46,18 +45,18 @@
     "ts-config-single-spa": "^3.0.0",
     "@types/testing-library__jest-dom": "^5.14.1",
     "eslint-config-ts-react-important-stuff": "^3.0.0",
-    "webpack-config-single-spa-react-ts": "^4.0.0"
+    "webpack-config-single-spa-react-ts": "^4.0.0",    
+    "@types/jest": "^27.0.1",
+    "@types/systemjs": "^6.1.1",    
+    "@types/webpack-env": "^1.16.2",    
+    "@types/react": "^17.0.19",
+    "@types/react-dom": "^17.0.9"
   },
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "single-spa-react": "^4.3.1",
-    "@types/jest": "^27.0.1",
-    "@types/systemjs": "^6.1.1",
-    "@types/webpack-env": "^1.16.2",
-    "single-spa": "^5.9.3",
-    "@types/react": "^17.0.19",
-    "@types/react-dom": "^17.0.9"
+    "single-spa": "^5.9.3"
   },
   "types": "dist/konoha-main.d.ts"
 }
