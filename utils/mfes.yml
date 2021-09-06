@@ -13,13 +13,14 @@ steps:
       versionSpec: "14.x"
   - bash: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
     displayName: Install pnpm
+  - bash: echo
   - task: Cache@2
     displayName: Cache Pnpm store
     inputs:
       key: '"pnpm" | "$(Agent.OS)" | ${{ parameters.appName }}/pnpm-lock.yaml'
       restoreKeys: |
          pnpm | "$(Agent.OS)"
-      path: ~/.pnpm-store
+      path: /home/vsts/.pnpm-store
     
   - script: pnpm i --frozen-lockfile
     workingDirectory: ${{ parameters.appName }}
