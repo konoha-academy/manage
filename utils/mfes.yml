@@ -1,0 +1,40 @@
+parameters:
+  - name: portal
+    default: ""
+    type: string
+  - name: appName
+    default: ""
+    type: string
+
+steps:
+  - checkout: self
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "14.x"
+  - bash: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
+    displayName: Install pnpm
+  - script: pnpm i --frozen-lockfile
+    workingDirectory: root-config
+    displayName: "packages install"
+  - script: pnpm:build:*
+    workingDirectory: root-config
+    displayName: "build"
+  - task: AzureFileCopy@4
+    inputs:
+      sourcePath: dist
+      azureSubscription: batata
+      destination: azureBlob
+      storage: ${{ parameters.portal }}
+      containerName: ${{ parameters.appName }}
+  # - task: AzureCLI@2
+  #   displayName: Azure CLI Deploy
+  #   inputs:
+  #     azureSubscription: batata
+  #     scriptType: bash
+  #     workingDirectory: root-config
+  #     scriptLocation: inlineScript
+  #     inlineScript: |
+  #       az account show
+  #       az storage blob upload-batch \
+  #           --destination ${CONTAINER_NAME} \
+  #           --source dist --account-name ${ACCOUNT_NAME}
