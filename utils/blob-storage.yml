@@ -1,0 +1,26 @@
+parameters:
+  - name: portal
+    default: ""
+    type: string
+  - name: appName
+    default: ""
+    type: string
+
+steps:
+  - download: current
+    artifact: ${{ parameters.portal }}-${{ parameters.appName }}-$(Build.BuildNumber)
+  - template: js-setup.yml
+    parameters:
+      portal: ${{ parameters.portal }}
+      appName: ${{ parameters.appName }}
+  - task: AzureCLI@2
+    displayName: Publish to blob storage
+    inputs:
+      azureSubscription: batata
+      scriptType: bash
+      workingDirectory: ${{ parameters.appName }}
+      scriptLocation: inlineScript
+      inlineScript: |
+        az storage blob upload-batch \
+            --destination ${{ parameters.appName }} \
+            --source dist --account-name ${{ parameters.portal }}

@@ -1,0 +1,24 @@
+parameters:
+  - name: portal
+    default: ""
+    type: string
+  - name: appName
+    default: ""
+    type: string
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "14.x"
+  - bash: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
+    displayName: Install pnpm
+  - task: Cache@2
+    displayName: Cache Pnpm store
+    inputs:
+      key: '"pnpm" | "$(Agent.OS)" | ${{ parameters.appName }}/pnpm-lock.yaml'
+      restoreKeys: |
+        pnpm | "$(Agent.OS)"
+      path: /home/vsts/.pnpm-store
+  - script: pnpm i --frozen-lockfile
+    workingDirectory: ${{ parameters.appName }}
+    displayName: "packages install"

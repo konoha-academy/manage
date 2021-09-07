@@ -6,7 +6,9 @@
     "test": "jest --watch",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
-    "build": "webpack --mode=production"
+    "build": "concurrently pnpm:build:*",
+    "build:browser": "webpack --mode=production",
+    "build:server": "swc ./server -d dist --copy-files"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",

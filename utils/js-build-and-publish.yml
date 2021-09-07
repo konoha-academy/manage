@@ -1,0 +1,20 @@
+parameters:
+  - name: portal
+    default: ""
+    type: string
+  - name: appName
+    default: ""
+    type: string
+
+steps:
+  - checkout: self
+  - template: js-setup.yml
+    parameters:
+      portal: ${{ parameters.portal }}
+      appName: ${{ parameters.appName }}
+  - script: pnpm build
+    workingDirectory: ${{ parameters.appName }}
+    displayName: "build"
+  - script: rm -rf node_modules
+  - publish: ${{ parameters.appName }}
+    artifact: ${{ parameters.portal }}-${{ parameters.appName }}-$(Build.BuildNumber)

@@ -1,6 +1,5 @@
 const { merge } = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa-ts");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = (webpackConfigEnv, argv) => {
   const orgName = "konoha";
@@ -13,16 +12,10 @@ module.exports = (webpackConfigEnv, argv) => {
   });
 
   return merge(defaultConfig, {
-    // modify the webpack config however you'd like to by adding to this object
-    plugins: [
-      new HtmlWebpackPlugin({
-        inject: false,
-        template: "src/index.ejs",
-        templateParameters: {
-          isLocal: webpackConfigEnv && webpackConfigEnv.isLocal,
-          orgName,
-        },
-      }),
-    ],
+    entry: "./browser/konoha-root-config.ts",
+    output: {
+      filename: "konoha-root-config.js",
+      path: __dirname + "/dist/static",
+    },
   });
 };
