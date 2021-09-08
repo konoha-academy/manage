@@ -9,9 +9,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-extends:
-  template: ../utils/mfes.yml
-  parameters:
-    portal: konoha
-    appName: main
-    
+steps:
+  - template: ../utils/js-setup.yml
+    parameters:
+      portal: konoha
+      appName: main
+  - template: ../utils/blob-storage.yml
+    parameters:
+      portal: konoha
+      appName: main

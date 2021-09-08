@@ -51,6 +51,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "single-spa": "^5.9.3",
     "single-spa-layout": "1.6.0"

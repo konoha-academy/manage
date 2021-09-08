@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - wrapper
+
+variables:
+  portal: konoha
+  appName: wrapper
+  imageName: $(portal)-$(appName)-
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - template: ../utils/js-setup.yml
+    parameters:
+      portal: $(portal)
+      appName: $(appName)
+  - task: Docker@2
+    displayName: Build an image
+    inputs:
+      repository: $(imageName)
+      command: build
+      Dockerfile: ./Dockerfile
