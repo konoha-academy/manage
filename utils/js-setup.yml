@@ -7,6 +7,7 @@ parameters:
     type: string
 
 steps:
+  - checkout: self
   - task: NodeTool@0
     inputs:
       versionSpec: "14.x"
@@ -22,3 +23,6 @@ steps:
   - script: pnpm i --frozen-lockfile
     workingDirectory: ${{ parameters.appName }}
     displayName: "packages install"
+  - script: pnpm build
+    workingDirectory: ${{ parameters.appName }}
+    displayName: "build"

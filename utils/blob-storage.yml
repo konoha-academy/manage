@@ -5,14 +5,11 @@ parameters:
   - name: appName
     default: ""
     type: string
+  - name: sourceFolder
+    default: dist
+    type: string
 
 steps:
-  - download: current
-    artifact: ${{ parameters.portal }}-${{ parameters.appName }}-$(Build.BuildNumber)
-  - template: js-setup.yml
-    parameters:
-      portal: ${{ parameters.portal }}
-      appName: ${{ parameters.appName }}
   - task: AzureCLI@2
     displayName: Publish to blob storage
     inputs:
@@ -23,4 +20,4 @@ steps:
       inlineScript: |
         az storage blob upload-batch \
             --destination ${{ parameters.appName }} \
-            --source dist --account-name ${{ parameters.portal }}
+            --source ${{ parameters.sourceFolder }} --account-name ${{ parameters.portal }}

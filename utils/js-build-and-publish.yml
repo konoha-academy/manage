@@ -15,6 +15,3 @@ steps:
   - script: pnpm build
     workingDirectory: ${{ parameters.appName }}
     displayName: "build"
-  - script: rm -rf node_modules
-  - publish: ${{ parameters.appName }}
-    artifact: ${{ parameters.portal }}-${{ parameters.appName }}-$(Build.BuildNumber)

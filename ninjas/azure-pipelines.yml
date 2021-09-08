@@ -9,18 +9,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-jobs:
-  - job: Build
-    steps:
-    - template: ../utils/js-build-and-publish.yml
-      parameters:
-        portal: konoha
-        appName: ninjas
-  - job: Publish
-    dependsOn: Build
-    condition: succeeded()
-    steps:
-      - template: ../utils/blob-storage.yml
-        parameters:
-          portal: konoha
-          appName: ninjas
+steps:
+  - template: ../utils/js-setup.yml
+    parameters:
+      portal: konoha
+      appName: ninjas
+  - template: ../utils/blob-storage.yml
+    parameters:
+      portal: konoha
+      appName: ninjas
