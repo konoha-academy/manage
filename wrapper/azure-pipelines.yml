@@ -9,19 +9,25 @@ trigger:
 variables:
   portal: konoha
   appName: wrapper
-  imageName: $(portal)-$(appName)-
+  imageName: $(portal)-$(appName)-$(Build.BuildId)
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-  - template: ../utils/js-setup.yml
-    parameters:
-      portal: $(portal)
-      appName: $(appName)
   - task: Docker@2
-    displayName: Build an image
+    displayName: Login to Docker Hub
     inputs:
-      repository: $(imageName)
-      command: build
-      Dockerfile: ./Dockerfile
+      command: login
+      containerRegistry: container-registry
+  # - template: ../utils/js-setup.yml
+  #   parameters:
+  #     portal: $(portal)
+  #     appName: $(appName)
+  # - task: Docker@2
+  #   displayName: Build an image
+  #   inputs:
+  #     containerRegistry: containerRegistry
+  #     repository: $(imageName)
+  #     command: build
+  #     Dockerfile: ./Dockerfile
